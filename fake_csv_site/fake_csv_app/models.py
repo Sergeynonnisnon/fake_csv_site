@@ -12,6 +12,7 @@ class schema_list(models.Model):
 
 class schema(models.Model):
     schema_list = models.ForeignKey(schema_list, on_delete=models.CASCADE)
+    last_mod = models.DateTimeField(auto_now=True)
     name_schema = models.CharField(max_length=200)
     rows = models.IntegerField(default=1)
     Job = models.BooleanField(default=False)

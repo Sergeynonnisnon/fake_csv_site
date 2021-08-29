@@ -1,18 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from .models import schema_list,schema
 
 def login(response):
     return HttpResponse('login page be here')
 
 
 def data_schemas(response):
-    return HttpResponse('data schemas user be here')
+    sl = schema_list.objects.get(name='testlist')
+
+    return render(response, 'fake_csv_app/data_schemas.html', {'sl': sl})
 
 
 def new_schema(response):
-    return HttpResponse('new schema be here')
+    return render(response, 'fake_csv_app/base.html', {})
 
 
 def data_sets(response):
-    return HttpResponse('data sets be here')
+    return render(response, 'fake_csv_app/base.html', {})
