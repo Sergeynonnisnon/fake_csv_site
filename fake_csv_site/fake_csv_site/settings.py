@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'fake_csv_app.apps.FakeCsvAppConfig',
 ]
 
 MIDDLEWARE = [
