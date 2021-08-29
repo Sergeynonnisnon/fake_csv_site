@@ -1,4 +1,4 @@
-"""fake_scv_site URL Configuration
+"""fake_csv_site URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
