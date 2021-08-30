@@ -1,8 +1,18 @@
 {% extends 'fake_csv_app/base.html'%}
-{% block title  %}
-new schemas
+{% block title %}
+new schema
 {% endblock %}
 
 {% block content %}
-<h1> nes schemas be here </h1>
+<form method="POST" action="/new_schema/">
+    {% csrf_token %}
+    {{ basic_form.as_ul }}
+    {{ column_form.as_ul }}
+
+    <button type="submit" name="save">Create New</button>
+
+
+
+</form>
+
 {% endblock %}
