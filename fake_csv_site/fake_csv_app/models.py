@@ -2,21 +2,17 @@ from django.db import models
 from django.forms import ModelForm
 
 # Create your models here.
-COLUMN_CHOICES = (
+COLUMN_FIELD_CHOICES = (
     ('Job', 'Job'),
     ('Email', 'Email'),
 )
-
-
-class SchemaList(models.Model):
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
-
+ORDER_CHOISES=(
+    (1, 1),
+    (2, 2),
+)
 
 class Schema(models.Model):
-    SchemaList = models.ForeignKey(SchemaList, on_delete=models.CASCADE)
+
     last_mod = models.DateTimeField(auto_now=True)
     column_cep = models.CharField(max_length=20, choices=(
         ('Comma(,)', ','),
@@ -29,20 +25,11 @@ class Schema(models.Model):
 
 
 class SchemaColumn(models.Model):
-    name_schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
-    column_field = models.CharField(max_length=20, choices=COLUMN_CHOICES)
+    Schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
+    order_by = models.IntegerField (choices=ORDER_CHOISES)
+    column_field = models.CharField(max_length=20, choices=COLUMN_FIELD_CHOICES)
 
     def __str__(self):
         return self.column_field
 
 
-class SchemaForm(ModelForm):
-    class Meta:
-        model = Schema
-        fields = ['column_cep', 'name_schema', 'rows']
-
-
-class ColumnForm(ModelForm):
-    class Meta:
-        model = SchemaColumn
-        fields = ['column_field', ]

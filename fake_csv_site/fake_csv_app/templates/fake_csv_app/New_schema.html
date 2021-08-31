@@ -4,15 +4,11 @@ new schema
 {% endblock %}
 
 {% block content %}
-<form method="POST" action="/new_schema/">
+<form method="post">
     {% csrf_token %}
-    {{ basic_form.as_ul }}
-    {{ column_form.as_ul }}
-
-    <button type="submit" name="save">Create New</button>
-
-
-
+    {{ basicform.as_p }}
+    <button type="submit" name="AddNew" value="AddNew">Add NEW</button>
+    <button type="submit" name="save" value="save">Create</button>
 </form>
 
 {% endblock %}
