@@ -1,0 +1,43 @@
+{% extends 'fake_csv_app/base.html'%}
+{% block title  %}
+Data schemas
+{% endblock %}
+
+{% block content %}
+<h1> Data schemas be here </h1>
+<form method="POST" id="table">
+  {% csrf_token %}
+  <div class=".flex-sm-row-reverse">
+    <button type="submit" name="new" value="new" class="btn-success float-right">New schema</button>
+    </div>
+    <table class='table table-hover'>
+      <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Last mod</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+
+    {% for schema in sl %}
+
+  <tbody>
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{schema.name_schema}}</td>
+      <td>{{schema.last_mod |date:'Y-m-d '}}</td>
+      <td>
+        <a href="edit_schema" id="edit-{{ schema.id}}">edit</a>
+       <button type="submit" name="delete" value="del-{{ schema.id }}" class="btn-danger" >del</button>
+      </td>
+    </tr>
+
+    {% endfor %}
+    </table>
+</form>
+{%for schema in sl%}
+
+{%endfor%}
+
+{% endblock %}

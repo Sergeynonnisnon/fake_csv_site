@@ -1,0 +1,65 @@
+{% extends 'fake_csv_app/base.html'%}
+{% block title %}
+new schema
+{% endblock %}
+
+{% block content %}
+
+ {% csrf_token %}
+
+
+<form method="post">
+    {% load crispy_forms_tags %}
+    {% csrf_token %}
+    <div class="text-right">
+    <button type="submit" name="save" value="save" class="btn-success">Create</button>
+        </div>
+    <div class="text-justify">
+    {{basicform|crispy}}
+    </div>
+
+
+
+{{ columnform.management_form }}
+    <input type="button" class="btn-success" value="Add More" id="add_more">
+<div id="form_set">
+    {% for form in columnform.forms %}
+	    {{form.non_field_errors}}
+		{{form.errors}}
+        <table class='table table-hover'>
+            <td>{{ form.name |as_crispy_field}}</td>
+            <td>{{ form.type_column  |as_crispy_field}}</td>
+            <td>{{ form.min_choise |as_crispy_field}}</td>
+            <td>{{ form.max_choise |as_crispy_field}}</td>
+            <td> <input type="button" class="btn-danger" value="Del" name="delete" id="delete"></td>
+        </table>
+    {% endfor %}
+</div>
+
+<div id="empty_form" style="display:none">
+    <table class='table table-hover'>
+
+        <tr>
+
+      <td>{{ columnform.empty_form.name |as_crispy_field}}</td>
+      <td>{{ columnform.empty_form.type_column |as_crispy_field}}</td>
+      <td>{{ columnform.empty_form.min_choise |as_crispy_field}}</td>
+      <td>{{ columnform.empty_form.max_choise |as_crispy_field}}</td>
+
+    </tr>
+
+
+
+
+    </table>
+</div>
+
+</form>
+<script>
+$('#add_more').click(function() {
+	var form_idx = $('#id_form-TOTAL_FORMS').val();
+	$('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+	$('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+});
+</script>
+{% endblock %}
