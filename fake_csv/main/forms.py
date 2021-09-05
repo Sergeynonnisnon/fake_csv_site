@@ -34,6 +34,6 @@ class ColumnForm(forms.Form):
 class SetForm(forms.Form):
 
     name_schema = forms.ModelChoiceField(queryset=Schema.objects.all(),
-                                    widget=forms.Select)
+                                         widget=forms.Select)
 
 ColumnFormSet = formset_factory(ColumnForm, extra=1)

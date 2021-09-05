@@ -50,7 +50,7 @@ class Column(models.Model):
 
 SET_STATUSE_CHOISES=(
 
-    ('Not send', 'Not send'),
+    ('error', 'error'),
     ('Processed', 'Processed'),
     ('Ready', 'Ready'),
 )
@@ -58,9 +58,10 @@ SET_STATUSE_CHOISES=(
 class Sets(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=SET_STATUSE_CHOISES)
-    id_schema = models.ForeignKey(Schema, to_field='id', on_delete=models.CASCADE)
+    name_schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
     download_link = models.CharField(max_length=200, blank=True)
     create_time = models.DateTimeField(auto_now_add=True)
+    rows = models.IntegerField()
 
     def __str__(self):
-        return self.id_schema
+        return self.name_schema

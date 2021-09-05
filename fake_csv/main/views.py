@@ -98,27 +98,55 @@ def new_schema(request):
 
 
 def data_sets(request):
-    if request.method == 'GET':
-        setform = SetForm()
-        setform.fields['name_schema'].queryset = Schema.objects.filter(user=request.user)
-        sl = Sets.objects.filter(user=request.user)
+    setform = SetForm()
+    setform.fields['name_schema'].queryset = Schema.objects.filter(user=request.user)
+    sl = Sets.objects.filter(user=request.user)
 
-        return render(request, 'fake_csv_app/data_sets.html', {'sl': sl,'setform':setform })
+    if request.method == 'GET':
+        return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform })
 
     else:
+
+        if request.POST.get('download'):
+            sl = Sets.objects.filter(user=request.user)
+            print(request.POST)
+            return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
         if request.POST.get('save'):
 
             # request.post.name_schema return id schema in db
             setform = SetForm(request.POST)
             if setform.is_valid():
-                print(setform.cleaned_data)
+
                 instanse = Sets(
                     user=request.user,
-                    id_schema=setform.cleaned_data['name_schema'],
+                    name_schema=setform.cleaned_data.get('name_schema'),
+                    rows=request.POST.get('row'),
                     status='Processed')
-                instanse.save()
+                #instanse.save()
 
-            setform.fields['name_schema'].queryset = Schema.objects.filter(user=request.user)
+                colums = Column.objects.filter(name_schema=setform.cleaned_data.get('name_schema'))
 
+                cols={}
+                col={}
+                for column in colums:
+                    print(column)
+
+                    col['name_column'] = column.name_column
+                    col['type_column'] = column.type_column
+                    col['min_choise'] = column.min_choise
+                    col['max_choise'] = column.max_choise
+                    cols[column]=col
+                    col={}
+                params = {
+                    "name_schema": request.POST.get('name_schema'),
+                    "rows_num": request.POST.get('row'),
+                    "colums": cols
+                        }
+                print(params)
+                print(setform.cleaned_data['name_schema'])
+                """response = requests.post('https://xc86kjfbdc.execute-api.eu-west-3.amazonaws.com/default/django_lambda',
+                              params=params)
+                print(response.content)"""
+            setform = SetForm()
             sl = Sets.objects.filter(user=request.user)
             return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
