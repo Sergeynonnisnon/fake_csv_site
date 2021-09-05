@@ -3,9 +3,10 @@ from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Schema, Column
-from .forms import LoginForm, NewShemaFormModel, ColumnForm, ColumnFormSet
+from .models import Schema, Column, Sets
+from .forms import LoginForm, NewShemaFormModel, ColumnFormSet, SetForm
 import copy
+import requests
 
 
 # Create your views here.
@@ -59,6 +60,7 @@ def data_schemas(request):
 
 
 def new_schema(request):
+
     basicform = NewShemaFormModel()
     columnform = ColumnFormSet()
     if request.method == 'POST':
@@ -96,4 +98,27 @@ def new_schema(request):
 
 
 def data_sets(request):
-    return render(request, 'fake_csv_app/base.html', {})
+    if request.method == 'GET':
+        setform = SetForm()
+        setform.fields['name_schema'].queryset = Schema.objects.filter(user=request.user)
+        sl = Sets.objects.filter(user=request.user)
+
+        return render(request, 'fake_csv_app/data_sets.html', {'sl': sl,'setform':setform })
+
+    else:
+        if request.POST.get('save'):
+
+            # request.post.name_schema return id schema in db
+            setform = SetForm(request.POST)
+            if setform.is_valid():
+                print(setform.cleaned_data)
+                instanse = Sets(
+                    user=request.user,
+                    id_schema=setform.cleaned_data['name_schema'],
+                    status='Processed')
+                instanse.save()
+
+            setform.fields['name_schema'].queryset = Schema.objects.filter(user=request.user)
+
+            sl = Sets.objects.filter(user=request.user)
+            return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})

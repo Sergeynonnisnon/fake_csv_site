@@ -5,11 +5,49 @@ Data sets
 
 {% block content %}
 <h1> Data sets be here </h1>
-<div class=".flex-sm-row-reverse">
+<form method="POST">
 
+    {% csrf_token %}
+    <div class=".flex-sm-row-reverse">
+            <div class="float-right">
+            {{setform.name_schema }}
+            </div>
 
     <input class="float-right" name="row" value="500">
-      <button type="submit" name="save" value="save" class="btn-success float-right">Generate Data</button>
+    <button type="submit" name="save" value="save" class="btn-success float-right">Generate Data</button>
+
     </div>
+
+    <table class='table table-hover'>
+      <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+
+    {% for schema in sl %}
+
+  <tbody>
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{schema.id_schema}}</td>
+        <td>{{schema.status}}</td>
+      <td>{{schema.create_time |date:'Y-m-d '}}</td>
+      <td>
+        <a href="edit_schema" id="edit-{{ schema.id}}">Download</a>
+
+      </td>
+    </tr>
+
+    {% endfor %}
+    </table>
+
+
+</form>
+
+
 
 {% endblock %}

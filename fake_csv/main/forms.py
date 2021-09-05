@@ -11,6 +11,7 @@ class NewShemaFormModel(forms.ModelForm):
         fields = ('name_schema',
 
                   'column_cep',
+                  'string_character',
 
                   )
 
@@ -30,6 +31,9 @@ class ColumnForm(forms.Form):
     min_choise = forms.IntegerField()
     max_choise = forms.IntegerField()
 
+class SetForm(forms.Form):
 
+    name_schema = forms.ModelChoiceField(queryset=Schema.objects.all(),
+                                    widget=forms.Select)
 
 ColumnFormSet = formset_factory(ColumnForm, extra=1)
