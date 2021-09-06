@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.shortcuts import render, redirect
 from django.http import FileResponse
+
+from .generate_fakecsv import gen_csv
 from .models import Schema, Column, Sets
 from .forms import LoginForm, NewShemaFormModel, ColumnFormSet, SetForm
 from .tasks import create_csv
@@ -99,8 +101,7 @@ def new_schema(request):
 
 
 def data_sets(request):
-    for set in Sets.objects.filter(status='Processed'):
-        create_csv.delay(set.id)
+
     setform = SetForm()
     setform.fields['name_schema'].queryset = Schema.objects.filter(user=request.user)
     sl = Sets.objects.filter(user=request.user)
@@ -139,8 +140,33 @@ def data_sets(request):
                 print(instanse.id)
 
                 if Sets.objects.get(id=instanse.id):
+                    #ignore selery
+                    set = Sets.objects.get(id=instanse.id)
 
-                    create_csv.delay(instanse.id)
+                    rows_num = set.rows
+                    schema = Schema.objects.get(name_schema=set.name_schema)
+                    column_sep = schema.column_cep
+                    string_character = schema.string_character
+
+                    colums = Column.objects.filter(name_schema=set.name_schema)
+
+                    rows = []
+                    col = {}
+                    for column in colums:
+                        col['name_column'] = column.name_column
+                        col['type_column'] = column.type_column
+                        col['min_choise'] = column.min_choise
+                        col['max_choise'] = column.max_choise
+                        rows.append(col)
+                        col = {}
+
+                    print(rows_num, rows, column_sep, string_character, instanse.id)
+                    path_csv = gen_csv(rows_num, rows, column_sep, string_character, instanse.id).to_csv()
+                    set.download_link = path_csv
+                    set.status = 'Ready'
+                    set.save()
+
+                    #create_csv.delay(instanse.id)
                 else:
                     print('base dont save a instans ')
 
