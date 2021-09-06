@@ -141,6 +141,8 @@ def data_sets(request):
 
                 if Sets.objects.get(id=instanse.id):
                     #ignore selery
+                    #TODO Why selery dont work in heroku but work in localhost
+                    # create_csv.delay(instanse.id)
                     set = Sets.objects.get(id=instanse.id)
 
                     rows_num = set.rows
@@ -166,9 +168,9 @@ def data_sets(request):
                     set.status = 'Ready'
                     set.save()
 
-                    #create_csv.delay(instanse.id)
+
                 else:
-                    print('base dont save a instans ')
+                    print('base dont save a instanse ')
 
 
             return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
