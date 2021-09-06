@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Schema, Column, Sets
 from .forms import LoginForm, NewShemaFormModel, ColumnFormSet, SetForm
+from .tasks import create_csv
 import copy
 import requests
 
@@ -124,29 +125,8 @@ def data_sets(request):
                     status='Processed')
                 #instanse.save()
 
-                colums = Column.objects.filter(name_schema=setform.cleaned_data.get('name_schema'))
+                create_csv.delay()
 
-                cols={}
-                col={}
-                for column in colums:
-                    print(column)
-
-                    col['name_column'] = column.name_column
-                    col['type_column'] = column.type_column
-                    col['min_choise'] = column.min_choise
-                    col['max_choise'] = column.max_choise
-                    cols[column]=col
-                    col={}
-                params = {
-                    "name_schema": request.POST.get('name_schema'),
-                    "rows_num": request.POST.get('row'),
-                    "colums": cols
-                        }
-                print(params)
-                print(setform.cleaned_data['name_schema'])
-                """response = requests.post('https://xc86kjfbdc.execute-api.eu-west-3.amazonaws.com/default/django_lambda',
-                              params=params)
-                print(response.content)"""
             setform = SetForm()
             sl = Sets.objects.filter(user=request.user)
             return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
