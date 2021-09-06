@@ -138,4 +138,5 @@ def data_sets(request):
 
                 create_csv.delay(instanse.id)
 
-            return redirect('data_sets')
+            return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
+
