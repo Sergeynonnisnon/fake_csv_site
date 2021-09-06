@@ -27,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3b$xz)es4jeoa-qea74p9dt&qwct%l*m-6(z6ko+2px^wnt=c9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['fake-csv-site.herokuapp.com']
 
 # celery settings
 # Celery Configuration Options
