@@ -135,7 +135,7 @@ def data_sets(request):
                     status='Processed')
                 instanse.save()
                 print(instanse.id)
-                if Sets.objects.get(instanse.id):
+                if Sets.objects.get(id=instanse.id):
 
                     create_csv.delay(instanse.id)
                 else:
