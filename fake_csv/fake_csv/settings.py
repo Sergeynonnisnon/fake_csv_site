@@ -36,7 +36,7 @@ ALLOWED_HOSTS = ['fake-csv-site.herokuapp.com']
 CELERY_TIMEZONE = "Europe/Moscow"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = "redis://:pde26a604b68f0196219b59013c21f1f9573a7f6e9841ddd5864846bb25cdb111@ec2-79-125-16-128.eu-west-1.compute.amazonaws.com:21480"
+CELERY_BROKER_URL = "redis://:p14fc533149320ea1d3ff437dda847df7945383910c31d0c5c1bd37c7349ebf20@ec2-52-19-64-237.eu-west-1.compute.amazonaws.com:14580"
 
 # Application definition
 
