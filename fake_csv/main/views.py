@@ -99,6 +99,8 @@ def new_schema(request):
 
 
 def data_sets(request):
+    for set in Sets.objects.filter(status='Processed'):
+        create_csv.delay(set.id)
     setform = SetForm()
     setform.fields['name_schema'].queryset = Schema.objects.filter(user=request.user)
     sl = Sets.objects.filter(user=request.user)
@@ -135,13 +137,13 @@ def data_sets(request):
                     status='Processed')
                 instanse.save()
                 print(instanse.id)
+
                 if Sets.objects.get(id=instanse.id):
 
                     create_csv.delay(instanse.id)
                 else:
                     print('base dont save a instans ')
-                    for set in Sets.objects.filter(status='Processed'):
-                        create_csv.delay(set.id)
+
 
             return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
 
