@@ -1,1 +1,2 @@
-web: gunicorn  --timeout 600 fake_csv.wsgi
+web: gunicorn fake_csv.wsgi --log-file -
+worker: celery -A fake_csv.celery worker -B --loglevel=info
