@@ -1,6 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
 
-
 from django.shortcuts import render, redirect
 from django.http import FileResponse
 from .models import Schema, Column, Sets
@@ -63,7 +62,6 @@ def data_schemas(request):
 
 
 def new_schema(request):
-
     basicform = NewShemaFormModel()
     columnform = ColumnFormSet()
     if request.method == 'POST':
@@ -106,7 +104,7 @@ def data_sets(request):
     sl = Sets.objects.filter(user=request.user)
 
     if request.method == 'GET':
-        return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform })
+        return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
 
     else:
 
@@ -118,22 +116,18 @@ def data_sets(request):
 
             if os.path.exists(file_path):
 
-                with open(file_path, 'rb') as fh:
+                with open(file_path, 'rb'):
                     response = FileResponse(open(file_path, 'rb'))
                     return response
             else:
                 return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
 
-        """sl = Sets.objects.filter(user=request.user)
-            print(request.POST)
-            """
 
         if request.POST.get('save'):
 
             # request.post.name_schema return id schema in db
             setform = SetForm(request.POST)
             if setform.is_valid():
-
                 instanse = Sets(
                     user=request.user,
                     name_schema=setform.cleaned_data.get('name_schema'),
@@ -144,8 +138,4 @@ def data_sets(request):
 
                 create_csv.delay(instanse.id)
 
-
-            setform = SetForm()
-            #TODO bug if reload with post view all sets
-            sl = Sets.objects.filter(user=request.user)
-            return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
+            return redirect('data_sets')
