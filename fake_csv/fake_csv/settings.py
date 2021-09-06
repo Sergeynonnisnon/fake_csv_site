@@ -37,9 +37,10 @@ ALLOWED_HOSTS = ['127.0.0.1',
 CELERY_TIMEZONE = "Europe/Moscow"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = 'redis://redistogo:b8895d381d9765413d472838ef2d8203@soapfish.redistogo.com:11672'
-#redis url heroku
-#"redis://:p14fc533149320ea1d3ff437dda847df7945383910c31d0c5c1bd37c7349ebf20@ec2-52-19-64-237.eu-west-1.compute.amazonaws.com:14580"
+CELERY_BROKER_URL ="redis://:pbcb5ce5a339feb82788b739a44c082c2888d6575e331268d3a6dc2a742bd6fd9@ec2-63-34-206-133.eu-west-1.compute.amazonaws.com:16610"
+#redis url redistogo
+
+'redis://redistogo:b8895d381d9765413d472838ef2d8203@soapfish.redistogo.com:11672'
 
 # Application definition
 
