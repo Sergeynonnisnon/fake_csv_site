@@ -1,13 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import FileResponse
 from .models import Schema, Column, Sets
 from .forms import LoginForm, NewShemaFormModel, ColumnFormSet, SetForm
 from .tasks import create_csv
-import copy
-import requests
+
+import os
+from django.conf import settings
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -109,9 +111,23 @@ def data_sets(request):
     else:
 
         if request.POST.get('download'):
-            sl = Sets.objects.filter(user=request.user)
+            path = request.POST.get('download').split('-')[-1]
+
+            file_path = os.path.join(settings.MEDIA_ROOT, f'{path}.csv')
+            print(file_path)
+
+            if os.path.exists(file_path):
+
+                with open(file_path, 'rb') as fh:
+                    response = FileResponse(open(file_path, 'rb'))
+                    return response
+            else:
+                return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
+
+        """sl = Sets.objects.filter(user=request.user)
             print(request.POST)
-            return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})
+            """
+
         if request.POST.get('save'):
 
             # request.post.name_schema return id schema in db
@@ -123,10 +139,13 @@ def data_sets(request):
                     name_schema=setform.cleaned_data.get('name_schema'),
                     rows=request.POST.get('row'),
                     status='Processed')
-                #instanse.save()
+                instanse.save()
+                print(instanse.id)
 
-                create_csv.delay()
+                create_csv.delay(instanse.id)
+
 
             setform = SetForm()
+            #TODO bug if reload with post view all sets
             sl = Sets.objects.filter(user=request.user)
             return render(request, 'fake_csv_app/data_sets.html', {'sl': sl, 'setform': setform})

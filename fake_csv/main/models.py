@@ -2,8 +2,11 @@ import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.files.storage import FileSystemStorage
+
 
 # Create your models here.
+fs = FileSystemStorage(location='main/source')
 
 COLUMN_FIELD_CHOICES = (
 
@@ -25,8 +28,8 @@ class Schema(models.Model):
     last_mod = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     column_cep = models.CharField(max_length=20, choices=(
-        ('Comma(,)', ','),
-        ('Semicolon(;)', ';')), default='Comma(,)')
+        (',', ','),
+        (';', ';')), default='Comma(,)')
     string_character = models.CharField(max_length=20, choices=(
         (r'"', r'"'),
         (r"'", r"'")), default=r'"')
