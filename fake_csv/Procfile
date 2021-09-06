@@ -1,1 +1,1 @@
-web: gunicorn fake_csv.wsgi
+web: gunicorn  --timeout 600 fake_csv.wsgi
